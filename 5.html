@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			html {
+				font-size: 62.5%;
+			}
+			body {
+				width: 100vw;
+				height: 100vh;
+				display: grid;
+				place-items: center;
+			}
+			.cal_body {
+				display: grid;
+				place-items: center;
+				background-color: #f5f6fa;
+				border: 1px solid black;
+				border-radius: 0.5rem;
+				box-shadow: 2px 2px 2px grey;
+				padding: 1rem;
+				grid-template-columns: 1fr;
+				grid-template-rows: 0.3fr 0.7fr;
+				grid-gap: 1rem;
+			}
+			.output {
+				width: 100%;
+				height: 100%;
+				grid-row: 1/2;
+				border: 1px solid black;
+				font-size: 1.3rem;
+				font-family: Arial, Helvetica, sans-serif;
+				display: grid;
+				grid-template-rows: 0.7fr 0.3fr;
+				padding: 0.5rem;
+				border-radius: 0.5rem;
+				background-color: #d2dae2;
+			}
+			h1 {
+				font-weight: 100;
+			}
+			.soln {
+				font-size: 2rem;
+				text-align: right;
+			}
+			.input {
+				grid-row: 2/-1;
+				display: grid;
+				grid-template-columns: repeat(4, 6rem);
+				grid-template-rows: repeat(5, 6rem);
+				grid-gap: 0.25rem;
+			}
+			.btn {
+				cursor: pointer;
+				background-color: #f1f2f6;
+				font-size: 1.8rem;
+				border-radius: 0.4rem;
+			}
+			.btn:active {
+				background-color: #dfe4ea;
+			}
+			.fxn {
+				background-color: #dfe4ea;
+			}
+			.fxn:active {
+				background-color: #ced6e0;
+			}
+			#equal {
+				background-color: #00a8ff;
+				color: white;
+			}
+			#equal:active {
+				background-color: #1e90ff;
+			}
+		</style>
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="cal_body">
+			<div class="output">
+				<h1 class="display"></h1>
+				<h1 class="soln"></h1>
+			</div>
+			<div class="input">
+				<button class="btn fxn" onclick="clearDisplay()">C</button>
+				<button class="btn fxn" onclick="push('%')">%</button>
+				<button class="btn fxn" onclick="delchar()">X</button>
+				<button class="btn fxn" onclick="push('/')">/</button>
+				<button class="btn" onclick="push(7)">7</button>
+				<button class="btn" onclick="push(8)">8</button>
+				<button class="btn" onclick="push(9)">9</button>
+				<button class="btn fxn" onclick="push('*')">*</button>
+				<button class="btn" onclick="push(4)">4</button>
+				<button class="btn" onclick="push(5)">5</button>
+				<button class="btn" onclick="push(6)">6</button>
+				<button class="btn fxn" onclick="push('-')">-</button>
+				<button class="btn" onclick="push(1)">1</button>
+				<button class="btn" onclick="push(2)">2</button>
+				<button class="btn" onclick="push(3)">3</button>
+				<button class="btn fxn" onclick="push('+')">+</button>
+				<button class="btn" onclick="push('00')">00</button>
+				<button class="btn" onclick="push(0)">0</button>
+				<button class="btn" onclick="push('.')">.</button>
+				<button class="btn" id="equal" onclick="calc()">=</button>
+			</div>
+		</div>
+		<script>
+			const dis = document.querySelector(".display");
+			const ansDisplay = document.querySelector(".soln");
+			let display = "";
+			let ans = "";
+			const clearDisplay = () => {
+				display = "";
+				ans = "";
+			};
+
+			const delchar = () => {
+				display = display.substring(0, display.length - 1);
+				ans = "";
+			};
+
+			const push = (num) => {
+				ans = "";
+				display += num;
+			};
+
+			let plus = (a, b) => a + b;
+			let minus = (a, b) => a - b;
+			let multiply = (a, b) => a * b;
+			let divide = (a, b) => a / b;
+			let mod = (a, b) => a % b;
+
+			const calc = () => {
+				ans = "";
+				if (display.indexOf("+") > 0) {
+					let n = display.indexOf("+");
+					ans += plus(
+						+display.substring(0, n),
+						+display.substring(n + 1, display.length)
+					);
+				} else if (display.indexOf("-") > 0) {
+					let n = display.indexOf("-");
+
+					ans += minus(
+						+display.substring(0, n),
+						+display.substring(n + 1, display.length)
+					);
+				} else if (display.indexOf("*") > 0) {
+					let n = display.indexOf("*");
+
+					ans += multiply(
+						+display.substring(0, n),
+						+display.substring(n + 1, display.length)
+					);
+				} else if (display.indexOf("/") > 0) {
+					let n = display.indexOf("/");
+
+					ans += divide(
+						+display.substring(0, n),
+						+display.substring(n + 1, display.length)
+					);
+				} else if (display.indexOf("%") > 0) {
+					let n = display.indexOf("%");
+
+					ans += mod(
+						+display.substring(0, n),
+						+display.substring(n + 1, display.length)
+					);
+				}
+				if (ans.length) ans = "= " + ans.substring(0, ans.length);
+			};
+
+			setInterval(() => {
+				dis.innerHTML = display;
+				ansDisplay.innerHTML = ans;
+			}, 250);
+		</script>
+	</body>
+</html>
